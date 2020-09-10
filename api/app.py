@@ -1,7 +1,7 @@
+import celery.states as states
 from flask import Flask
 from flask import url_for, jsonify
 from worker import celery
-import celery.states as states
 
 dev_mode = True
 app = Flask(__name__)
@@ -11,6 +11,7 @@ app.config.update(
     USE_RELOADER=dev_mode,
     THREADED=False
 )
+
 
 @app.route('/add/<int:param1>/<int:param2>')
 def add(param1: int, param2: int) -> str:
@@ -27,9 +28,11 @@ def check_task(task_id: str) -> str:
     else:
         return str(res.result)
 
+
 @app.route('/health_check')
 def health_check() -> str:
         return jsonify("OK")
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5001')
